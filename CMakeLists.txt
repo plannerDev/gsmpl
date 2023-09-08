@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -Wall -Wextra -Wpedantic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fvisibility-inlines-hidden")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-add_compile_options("-o3")
+add_compile_options("-O3")
 
 set(CMAKE_CXX_STANDARD 20)
 # set(CMAKE_BUILD_TYPE "Debug")
