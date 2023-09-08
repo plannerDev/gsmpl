@@ -6,21 +6,20 @@
 
 namespace gsmpl {
 namespace {
-RRTParamConstPtr rrtParam(const PlannerContext& context)
-{
+RRTParamConstPtr rrtParam(const PlannerContext& context) {
     return std::static_pointer_cast<const RRTParam>(context.plannerParam);
 }
 } // namespace
 
 RRT::RRT(const SpaceInformationBasePtr& si, const ProblemDefinition& pd,
          const PlannerContext& context, const PlannerRecord::VisualFunction& vf)
-    : Planner(si, pd), param_(*rrtParam(context)), vf_(vf),
-      nearestNeighbor_(std::make_shared<NearestNeighborLinear>(si_->distance))
-{
+    : Planner(si, pd),
+      param_(*rrtParam(context)),
+      vf_(vf),
+      nearestNeighbor_(std::make_shared<NearestNeighborLinear>(si_->distance)) {
 }
 
-const PlannerSolution& RRT::solve()
-{
+const PlannerSolution& RRT::solve() {
     LOGD();
     assert(goal_->type == GoalType::JointTolerance);
     start_.printState("start");
@@ -74,27 +73,27 @@ const PlannerSolution& RRT::solve()
     return solution_;
 }
 
-std::optional<VertexPtr> RRT::extend(const State& qSampled)
-{
+std::optional<VertexPtr> RRT::extend(const State& qSampled) {
     auto vNear = nearestNeighbor_->nearest(qSampled);
     const State& qNew = newState(qSampled, vNear->state, param_.stepSize);
 
     if (si_->checkers->isValid(qNew)) {
         if (si_->localPlanner->validInterpolatePath(
-                vNear->state, qNew, param_.localPlannerStepSizeJps, param_.localPlannerStepSizeTcp))
-            return std::make_shared<Vertex>(vNear.get(), qNew, opti_->stateCost(qNew));
+                vNear->state, qNew, param_.localPlannerStepSizeJps,
+                param_.localPlannerStepSizeTcp))
+            return std::make_shared<Vertex>(vNear.get(), qNew,
+                                            opti_->stateCost(qNew));
     }
     return {};
 }
 
-void RRT::update(const VertexPtr& vNew)
-{
+void RRT::update(const VertexPtr& vNew) {
     tree_.addVertex(vNew);
     nearestNeighbor_->update(vNew);
     solution_.path = generatePath(vNew);
 }
-State RRT::newState(const State& qSampled, const State& qNear, double stepSize) const
-{
+State RRT::newState(const State& qSampled, const State& qNear,
+                    double stepSize) const {
     assert(qSampled.size() == qNear.size());
     State qNew;
     for (size_t i = 0; i < qNear.size(); i++) {
@@ -104,8 +103,7 @@ State RRT::newState(const State& qSampled, const State& qNear, double stepSize) 
     return qNew;
 }
 
-Path RRT::generatePath(const VertexPtr& v) const
-{
+Path RRT::generatePath(const VertexPtr& v) const {
     Path path;
     path.push_back(v->state);
     auto currentV = v.get();
@@ -118,8 +116,7 @@ Path RRT::generatePath(const VertexPtr& v) const
     return path;
 }
 
-PlannerRecord RRT::plannerRecord() const
-{
+PlannerRecord RRT::plannerRecord() const {
     PlannerRecord pr;
     pr.start = start_;
     pr.goal = currentGoal_;

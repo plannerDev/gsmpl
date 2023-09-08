@@ -12,8 +12,7 @@
 namespace gsmpl {
 Eigen::Isometry3d rotateZAxis(double theta);
 
-static double sign(double x)
-{
+static double sign(double x) {
     if (x < -std::numeric_limits<double>::min())
         return -1.0;
     if (x > std::numeric_limits<double>::min())
@@ -28,27 +27,24 @@ double mappingZeroToPI(double theta); // [0, M_PI]
 double unitNBallMeasure(std::size_t N, double r = 1.0);
 double phsMeasure(std::size_t N, double minCost, double cost);
 
-class RNG
-{
+class RNG {
 public:
-    /* Generate a random real within given bounds: [\e lower_bound, \e upper_bound) */
-    double uniformReal(double lowerBound, double upperBound)
-    {
+    /* Generate a random real within given bounds: [\e lower_bound, \e
+     * upper_bound) */
+    double uniformReal(double lowerBound, double upperBound) {
         assert(lowerBound <= upperBound);
         std::random_device rd;
         std::mt19937 gen(rd());
         return (upperBound - lowerBound) * uniDist_(gen) + lowerBound;
     }
-    double uniformReal01()
-    {
+    double uniformReal01() {
         std::random_device rd;
         std::mt19937 gen(rd());
         return uniDist_(gen);
     }
 
     // [lowerBound, upperBound]
-    int uniformInt(int lowerBound, int upperBound)
-    {
+    int uniformInt(int lowerBound, int upperBound) {
         assert(lowerBound <= upperBound);
         std::random_device rd;
         std::mt19937 gen(rd());
@@ -56,8 +52,7 @@ public:
         return distri(gen);
     }
 
-    std::vector<double> uniformUnitSphere(std::size_t dim)
-    {
+    std::vector<double> uniformUnitSphere(std::size_t dim) {
         std::random_device rd;
         std::mt19937 gen(rd());
 
@@ -76,10 +71,10 @@ public:
         return v;
     }
 
-    std::vector<double> uniformInBall(std::size_t dim, double r)
-    {
+    std::vector<double> uniformInBall(std::size_t dim, double r) {
         std::vector<double> sphere = uniformUnitSphere(dim);
-        double radiusScale = r * std::pow(uniformReal01(), 1.0 / static_cast<double>(dim));
+        double radiusScale =
+            r * std::pow(uniformReal01(), 1.0 / static_cast<double>(dim));
         std::vector<double> ball;
 
         for (const auto& p : sphere)

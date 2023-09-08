@@ -5,12 +5,10 @@
 #include "../../base/bounds.h"
 
 namespace gsmpl {
-class BoundsChecker : public StateCheckerBase
-{
+class BoundsChecker : public StateCheckerBase {
 public:
     BoundsChecker(const Bounds& b) : bounds_(b) {}
-    bool isValid(const State& q) override
-    {
+    bool isValid(const State& q) override {
         assert(q.size() == bounds_.size());
 
         for (std::size_t i = 0; i < q.size(); i++) {

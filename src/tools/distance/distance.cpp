@@ -4,8 +4,7 @@
 #include "distance.h"
 
 namespace gsmpl {
-double DistanceLInfinity::distance(const State& q1, const State& q2) const
-{
+double DistanceLInfinity::distance(const State& q1, const State& q2) const {
     assert(q1.size() == dimension);
     assert(q2.size() == dimension);
 
@@ -21,22 +20,22 @@ double DistanceLInfinity::distance(const State& q1, const State& q2) const
     for (size_t i = 0; i < dimension; i++) {
         double residuum = 0;
         switch (bounds[i].type) {
-        case JointType::Revolute:
-            // TODO bound = 720, compare distance among dis(s1, s2), dis(s1, bound_l), dis(s1,
-            // bound_h)
-            residuum = abs(normalizeAngle(q2Value[i] - q1Value[i])) * rWeight_;
-            // double residuum = abs(qm2[i] - qm1[i]);
-            break;
-        case JointType::Prismatic:
-            residuum = abs(q2Value[i] - q1Value[i]) * pWeight_;
+            case JointType::Revolute:
+                // TODO bound = 720, compare distance among dis(s1, s2), dis(s1,
+                // bound_l), dis(s1, bound_h)
+                residuum =
+                    abs(normalizeAngle(q2Value[i] - q1Value[i])) * rWeight_;
+                // double residuum = abs(qm2[i] - qm1[i]);
+                break;
+            case JointType::Prismatic:
+                residuum = abs(q2Value[i] - q1Value[i]) * pWeight_;
         }
         if (distance < residuum)
             distance = residuum;
     }
     return distance;
 }
-bool DistanceLInfinity::isEquivalent(const State& q1, const State& q2) const
-{
+bool DistanceLInfinity::isEquivalent(const State& q1, const State& q2) const {
     assert(q1.size() == dimension);
     assert(q2.size() == dimension);
     for (std::size_t i = 0; i < dimension; i++) {
@@ -46,8 +45,7 @@ bool DistanceLInfinity::isEquivalent(const State& q1, const State& q2) const
     return true;
 }
 
-double DistanceL2::distance(const State& q1, const State& q2) const
-{
+double DistanceL2::distance(const State& q1, const State& q2) const {
     assert(q1.size() == dimension);
     assert(q2.size() == dimension);
 
@@ -63,11 +61,11 @@ double DistanceL2::distance(const State& q1, const State& q2) const
     double residuum = 0;
     for (size_t i = 0; i < dimension; i++) {
         switch (bounds[i].type) {
-        case JointType::Revolute:
-            residuum = (normalizeAngle(q2Value[i] - q1Value[i])) * rWeight_;
-            break;
-        case JointType::Prismatic:
-            residuum = abs(q2Value[i] - q1Value[i]) * pWeight_;
+            case JointType::Revolute:
+                residuum = (normalizeAngle(q2Value[i] - q1Value[i])) * rWeight_;
+                break;
+            case JointType::Prismatic:
+                residuum = abs(q2Value[i] - q1Value[i]) * pWeight_;
         }
         out += residuum * residuum;
     }

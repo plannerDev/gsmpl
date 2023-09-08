@@ -20,10 +20,8 @@ enum class PlannerStatus {
     Initialized,
 };
 
-struct EXPORT PlannerSolution
-{
-    bool isValid() const
-    {
+struct EXPORT PlannerSolution {
+    bool isValid() const {
         return status == PlannerStatus::ApproximateSolution ||
                status == PlannerStatus::ExactSolution;
     }

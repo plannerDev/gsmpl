@@ -8,10 +8,10 @@
 #include "state.h"
 
 namespace gsmpl {
-struct Bound
-{
+struct Bound {
     Bound() = default;
-    Bound(double l, double h, JointType t) : bound(calcBound(l, h)), offset(calcOffset(l, h)), type(t) {}
+    Bound(double l, double h, JointType t)
+        : bound(calcBound(l, h)), offset(calcOffset(l, h)), type(t) {}
 
     // [-b, b] ---> [l, h]
     double mappingBack(double x) const { return x + offset; }
@@ -23,23 +23,20 @@ struct Bound
     JointType type;
 
 private:
-    static double calcBound(double l, double h)
-    {
+    static double calcBound(double l, double h) {
         assert(l < h);
         return (h - l) * 0.5;
     }
-    static double calcOffset(double l, double h)
-    {
+    static double calcOffset(double l, double h) {
         assert(l < h);
         return (l + h) * 0.5;
     }
 };
 
-class Bounds
-{
+class Bounds {
 public:
     Bounds(const std::vector<Bound>& bounds) : bounds_(bounds) {}
-    Bounds(){}
+    Bounds() {}
 
     void push_back(const Bound& bound) { bounds_.push_back(bound); }
     const Bound& operator[](std::size_t i) const { return bounds_[i]; }

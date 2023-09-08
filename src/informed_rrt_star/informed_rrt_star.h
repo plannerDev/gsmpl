@@ -9,13 +9,13 @@
 #include "informed_rrt_star_param.h"
 
 namespace gsmpl {
-class InformedRRTStar : public Planner
-{
+class InformedRRTStar : public Planner {
 public:
     enum Status { Reached, Advanced, Trapped };
 
-    InformedRRTStar(const SpaceInformationBasePtr& si, const ProblemDefinition& pd,
-                    const PlannerContext& context, const PlannerRecord::VisualFunction& vf,
+    InformedRRTStar(const SpaceInformationBasePtr& si,
+                    const ProblemDefinition& pd, const PlannerContext& context,
+                    const PlannerRecord::VisualFunction& vf,
                     const PlannerRecord::VisualPoseFunction& vpf = nullptr);
 
     const PlannerSolution& solve() override;
@@ -23,8 +23,7 @@ public:
     void visualize() const;
 
 private:
-    struct NearKEdgeCost
-    {
+    struct NearKEdgeCost {
         NearKEdgeCost(const VertexPtr& vp, double cost) : v(vp), eCost(cost) {}
 
         VertexPtr v{nullptr};
@@ -39,7 +38,8 @@ private:
     void initNearestNeighbor(const Tree& tree);
     void updateNN(NearestNeighborBasePtr& nn, const VertexPtr& v);
     Path generatePath(const VertexPtr& v) const;
-    State steer(const State& qSampled, const State& qNear, double stepSize) const;
+    State steer(const State& qSampled, const State& qNear,
+                double stepSize) const;
     bool isValidEdge(const State& q1, const State& q2) const;
     double edgeCost(const State& q1, const State& q2) const;
     double kRRT(double rewireFactor) const;

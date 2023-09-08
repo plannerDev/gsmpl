@@ -5,17 +5,17 @@
 #include "nearest_neighbor_linear.h"
 
 namespace gsmpl {
-void NearestNeighborLinear::build(const VertexPtr& root)
-{
+void NearestNeighborLinear::build(const VertexPtr& root) {
     vertexes_.clear();
     vertexes_.push_back(root);
     root_ = root;
 }
 
-void NearestNeighborLinear::update(const VertexPtr& v) { vertexes_.push_back(v); }
+void NearestNeighborLinear::update(const VertexPtr& v) {
+    vertexes_.push_back(v);
+}
 
-VertexPtr NearestNeighborLinear::nearest(const State& q) const
-{
+VertexPtr NearestNeighborLinear::nearest(const State& q) const {
     auto startTime = std::chrono::steady_clock::now();
     assert(vertexes_.size() >= 1);
     double cost = std::numeric_limits<double>::max();
@@ -34,13 +34,14 @@ VertexPtr NearestNeighborLinear::nearest(const State& q) const
     return vertexes_[minIndex];
 }
 
-std::vector<VertexPtr> NearestNeighborLinear::nearestK(const State& q, std::size_t k) const
-{
+std::vector<VertexPtr> NearestNeighborLinear::nearestK(const State& q,
+                                                       std::size_t k) const {
     auto startTime = std::chrono::steady_clock::now();
 
     std::vector<VertexPtr> out = vertexes_;
     if (out.size() > k) {
-        std::partial_sort(out.begin(), out.begin() + k, out.end(), ElemSort(q, distance_));
+        std::partial_sort(out.begin(), out.begin() + k, out.end(),
+                          ElemSort(q, distance_));
         out.resize(k);
     } else {
         std::sort(out.begin(), out.end(), ElemSort(q, distance_));
@@ -52,8 +53,8 @@ std::vector<VertexPtr> NearestNeighborLinear::nearestK(const State& q, std::size
 
     return out;
 }
-std::vector<VertexPtr> NearestNeighborLinear::nearestR(const State& q, double r) const
-{
+std::vector<VertexPtr> NearestNeighborLinear::nearestR(const State& q,
+                                                       double r) const {
     auto startTime = std::chrono::steady_clock::now();
 
     std::vector<VertexPtr> out;

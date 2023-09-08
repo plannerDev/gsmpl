@@ -10,34 +10,32 @@
 
 namespace gsmpl {
 namespace {
-BiRRTParamConstPtr biRRTParam(const PlannerContext& context)
-{
+BiRRTParamConstPtr biRRTParam(const PlannerContext& context) {
     return std::static_pointer_cast<const BiRRTParam>(context.plannerParam);
 }
 } // namespace
-void BiRRT::TreeTuple::update(const VertexPtr& vNew)
-{
+void BiRRT::TreeTuple::update(const VertexPtr& vNew) {
     tree->addVertex(vNew);
     nearest->update(vNew);
 }
 
 BiRRT::BiRRT(const SpaceInformationBasePtr& si, const ProblemDefinition& pd,
-             const PlannerContext& context, const PlannerRecord::VisualFunction& vf)
-    : Planner(si, pd), param_(*biRRTParam(context)), vf_(vf),
+             const PlannerContext& context,
+             const PlannerRecord::VisualFunction& vf)
+    : Planner(si, pd),
+      param_(*biRRTParam(context)),
+      vf_(vf),
       sNearest_(std::make_shared<NearestNeighborLinear>(si->distance)),
-      gNearest_(std::make_shared<NearestNeighborLinear>(si->distance))
-{
-}
+      gNearest_(std::make_shared<NearestNeighborLinear>(si->distance)) {}
 BiRRT::BiRRT(const SpaceInformationBasePtr& si, const ProblemDefinition& pd,
              const BiRRTParam& param, const PlannerRecord::VisualFunction& vf)
-    : Planner(si, pd), param_(param), vf_(vf),
+    : Planner(si, pd),
+      param_(param),
+      vf_(vf),
       sNearest_(std::make_shared<NearestNeighborLinear>(si->distance)),
-      gNearest_(std::make_shared<NearestNeighborLinear>(si->distance))
-{
-}
+      gNearest_(std::make_shared<NearestNeighborLinear>(si->distance)) {}
 
-const PlannerSolution& BiRRT::solve()
-{
+const PlannerSolution& BiRRT::solve() {
     auto startTime = std::chrono::steady_clock::now();
     assert(goal_->type == GoalType::SingleState);
     start_.printState("start");
@@ -75,8 +73,8 @@ const PlannerSolution& BiRRT::solve()
     Status status = Status::Trapped;
     LOGD("*************************************");
     for (; i < param_.steps && status != Status::Reached; ++i) {
-        const State qSampled =
-            si_->sampler->sample(start.type == TreeType::Start ? currentGoal_ : start_);
+        const State qSampled = si_->sampler->sample(
+            start.type == TreeType::Start ? currentGoal_ : start_);
 
         if (const auto validV = extend(qSampled, start.nearest)) {
             const VertexPtr& vNew = validV.value();
@@ -125,15 +123,15 @@ const PlannerSolution& BiRRT::solve()
     return solution_;
 }
 
-std::optional<VertexPtr> BiRRT::extend(const State& qSampled, const NearestNeighborBasePtr& nearest)
-{
+std::optional<VertexPtr> BiRRT::extend(const State& qSampled,
+                                       const NearestNeighborBasePtr& nearest) {
     auto vNear = nearest->nearest(qSampled);
     const State& qNew = newState(qSampled, vNear->state, param_.stepSize);
 
     if (si_->checkers->isValid(qNew)) {
-        if (si_->localPlanner->validInterpolatePath(vNear->state, qNew,
-                                                    param_.localPlannerStepSizeJps,
-                                                    param_.localPlannerStepSizeTcp)) {
+        if (si_->localPlanner->validInterpolatePath(
+                vNear->state, qNew, param_.localPlannerStepSizeJps,
+                param_.localPlannerStepSizeTcp)) {
             double eCost = si_->distance->distance(vNear->state, qNew);
             double sCost = vNear->stateCost + eCost;
             return std::make_shared<Vertex>(vNear.get(), qNew, sCost, eCost);
@@ -141,8 +139,8 @@ std::optional<VertexPtr> BiRRT::extend(const State& qSampled, const NearestNeigh
     }
     return {};
 }
-VertexPtr BiRRT::mergeTree(Tree* tree1, const VertexPtr& t1v, const VertexPtr& t2v)
-{
+VertexPtr BiRRT::mergeTree(Tree* tree1, const VertexPtr& t1v,
+                           const VertexPtr& t2v) {
     Vertex* v1 = t1v.get();
     Vertex* v2 = t2v.get();
     VertexPtr vNew;
@@ -164,23 +162,24 @@ VertexPtr BiRRT::mergeTree(Tree* tree1, const VertexPtr& t1v, const VertexPtr& t
 
     return vNew;
 }
-std::optional<VertexPtr> BiRRT::connectTree(const VertexPtr& vNew, TreeTuple& treeTuple) const
-{
+std::optional<VertexPtr> BiRRT::connectTree(const VertexPtr& vNew,
+                                            TreeTuple& treeTuple) const {
     const State& qNew = vNew->state;
     auto vNear = treeTuple.nearest->nearest(qNew);
     double distance = si_->distance->distance(vNear->state, qNew);
     if (distance > param_.connectionRange)
         return {};
 
-    if (si_->localPlanner->validInterpolatePath(vNear->state, qNew, param_.localPlannerStepSizeJps,
+    if (si_->localPlanner->validInterpolatePath(vNear->state, qNew,
+                                                param_.localPlannerStepSizeJps,
                                                 param_.localPlannerStepSizeTcp))
         return vNear;
 
     return {};
 }
 
-State BiRRT::newState(const State& qSampled, const State& qNear, const double stepSize) const
-{
+State BiRRT::newState(const State& qSampled, const State& qNear,
+                      const double stepSize) const {
     assert(qSampled.size() == qNear.size());
     State qNew;
 
@@ -194,8 +193,7 @@ State BiRRT::newState(const State& qSampled, const State& qNear, const double st
     return qNew;
 }
 
-Path BiRRT::generatePath(const VertexPtr& v) const
-{
+Path BiRRT::generatePath(const VertexPtr& v) const {
     Path path;
     path.push_back(v->state);
     auto currentV = v.get();
@@ -208,8 +206,7 @@ Path BiRRT::generatePath(const VertexPtr& v) const
     return path;
 }
 
-void BiRRT::generateRecord()
-{
+void BiRRT::generateRecord() {
     PlannerRecord pr;
     pr.start = start_;
     pr.goal = currentGoal_;

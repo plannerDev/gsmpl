@@ -7,8 +7,7 @@ namespace gsmpl {
 GSMPL_STRUCT_FORWARD(PlannerParamBase)
 GSMPL_STRUCT_FORWARD(SamplerParamBase)
 
-struct PathSimplifierParamters
-{
+struct PathSimplifierParamters {
     double stepSizeJps;
     double stepSizeTcp;
     unsigned int maxEmptySteps;
@@ -19,23 +18,20 @@ struct PathSimplifierParamters
     unsigned int collapseCloseVerticesMaxSteps;
 };
 
-struct PlannerGeneralParamters
-{
+struct PlannerGeneralParamters {
     std::size_t dimension;
     PathSimplifierParamters pathSimplifier;
     Bounds bounds;
     double coneThreshold; // rad
 };
 
-struct SamplerParamBase
-{
+struct SamplerParamBase {
     SamplerParamBase(unsigned int sampleAttempts) : attempts(sampleAttempts) {}
     virtual ~SamplerParamBase() = default;
 
     unsigned int attempts;
 };
-struct PlannerParamBase
-{
+struct PlannerParamBase {
     virtual ~PlannerParamBase() = default;
 };
 } // namespace gsmpl

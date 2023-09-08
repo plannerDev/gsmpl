@@ -7,16 +7,12 @@
 namespace gsmpl {
 GSMPL_CLASS_FORWARD(ZConeRegionChecker)
 
-class ZConeRegionChecker : public StateCheckerBase
-{
+class ZConeRegionChecker : public StateCheckerBase {
 public:
     ZConeRegionChecker(const FKBasePtr& fk, double threshold)
-        : StateCheckerBase(), threshold_(threshold), fk_(fk)
-    {
-    }
+        : StateCheckerBase(), threshold_(threshold), fk_(fk) {}
 
-    bool isValid(const State& q) override
-    {
+    bool isValid(const State& q) override {
         Eigen::Vector3d zAxis(0, 0, 1);
         Eigen::Vector3d minusZaxis(0, 0, -1);
         Eigen::Isometry3d tcpPose = fk_->tcpPose(q);

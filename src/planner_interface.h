@@ -12,8 +12,7 @@
 #include "bi_rrt/bi_rrt.h"
 
 namespace gsmpl {
-class EXPORT PlannerInterface
-{
+class EXPORT PlannerInterface {
 public:
     PlannerInterface(const PlannerContext& context, const ProblemDefinition& pd,
                      const PlannerRecord::VisualFunction& vf,

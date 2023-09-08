@@ -10,8 +10,7 @@ GSMPL_CLASS_FORWARD(DistanceBase)
 GSMPL_CLASS_FORWARD(DistanceLInfinity)
 GSMPL_CLASS_FORWARD(DistanceL2)
 
-class EXPORT DistanceBase
-{
+class EXPORT DistanceBase {
 public:
     DistanceBase(const Bounds& b) : dimension(b.size()), bounds(b) {}
     virtual ~DistanceBase() = default;
@@ -27,8 +26,7 @@ protected:
     double pWeight_{1};
 };
 
-class EXPORT DistanceLInfinity : public DistanceBase
-{
+class EXPORT DistanceLInfinity : public DistanceBase {
 public:
     DistanceLInfinity(const Bounds& b) : DistanceBase(b) {}
 
@@ -36,8 +34,7 @@ public:
     bool isEquivalent(const State& q1, const State& q2) const override;
 };
 
-class EXPORT DistanceL2 : public DistanceLInfinity
-{
+class EXPORT DistanceL2 : public DistanceLInfinity {
 public:
     DistanceL2(const Bounds& b) : DistanceLInfinity(b) {}
 

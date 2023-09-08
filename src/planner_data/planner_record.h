@@ -8,9 +8,9 @@
 #include "planner_solution.h"
 
 namespace gsmpl {
-struct RGBA
-{
-    RGBA(float red, float green, float blue, float alpha) : r(red), g(green), b(blue), a(alpha) {}
+struct RGBA {
+    RGBA(float red, float green, float blue, float alpha)
+        : r(red), g(green), b(blue), a(alpha) {}
 
     float r;
     float g;
@@ -28,11 +28,11 @@ const RGBA Orange(1.0, 0.647, 0, 1.0);
 
 GSMPL_CLASS_FORWARD(PlannerRecord)
 
-class EXPORT PlannerRecord
-{
+class EXPORT PlannerRecord {
 public:
-    using VisualFunction = std::function<void(const PlannerRecord&)>;
-    using VisualPoseFunction = std::function<void(const State&, const RGBA&, const std::string&)>;
+    using VisualFunction = std::function<void(const PlannerRecord &)>;
+    using VisualPoseFunction =
+        std::function<void(const State &, const RGBA &, const std::string &)>;
 
     State start;
     State goal;
@@ -45,17 +45,17 @@ public:
     double cost = 0.0;
     bool approximate = false;
 
-    Tree pathToTree(const Path& path) const;
-    void addPath(const Path& p, const std::string& desc)
-    {
+    Tree pathToTree(const Path &path) const;
+    void addPath(const Path &p, const std::string &desc) {
         path = p;
         trees.emplace_back(pathToTree(path), desc);
     }
-    void addTree(const Tree& tree, const std::string& desc) { trees.emplace_back(tree, desc); }
+    void addTree(const Tree &tree, const std::string &desc) {
+        trees.emplace_back(tree, desc);
+    }
 };
 
-struct EXPORT PlannerTimes
-{
+struct EXPORT PlannerTimes {
     float planner;
     float rrtSolver;
     float pathProcessing;
@@ -68,8 +68,7 @@ struct EXPORT PlannerTimes
     double finalPathLength;
     int pathSize;
 
-    void print() const
-    {
+    void print() const {
         std::cout << "planner: " << planner << std::endl;
         std::cout << "rrtSolver: " << rrtSolver << std::endl;
         std::cout << "pathProcessing: " << pathProcessing << std::endl;

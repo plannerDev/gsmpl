@@ -8,15 +8,17 @@
 namespace gsmpl {
 enum class PlannerType { RRT, BiRRT, RRTStar, InformedRRTStar };
 
-struct PlannerContext
-{
-    PlannerContext(PlannerType type, SamplerParamBasePtr sParam, PlannerParamBasePtr pParam,
-                   const PlannerGeneralParamters& gParam, StateCheckerGroupPtr checkers,
-                   FKBasePtr fkPtr)
-        : plannerType(type), samplerParam(sParam), plannerParam(pParam), generalParam(gParam),
-          checkers(checkers), fk(fkPtr)
-    {
-    }
+struct PlannerContext {
+    PlannerContext(PlannerType type, SamplerParamBasePtr sParam,
+                   PlannerParamBasePtr pParam,
+                   const PlannerGeneralParamters& gParam,
+                   StateCheckerGroupPtr checkers, FKBasePtr fkPtr)
+        : plannerType(type),
+          samplerParam(sParam),
+          plannerParam(pParam),
+          generalParam(gParam),
+          checkers(checkers),
+          fk(fkPtr) {}
 
     PlannerType plannerType;
     SamplerParamBasePtr samplerParam;

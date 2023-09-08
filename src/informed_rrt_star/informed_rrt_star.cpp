@@ -9,24 +9,26 @@
 
 namespace gsmpl {
 namespace {
-InformedRRTStarParamConstPtr param(const PlannerContext& context)
-{
-    return std::static_pointer_cast<const InformedRRTStarParam>(context.plannerParam);
+InformedRRTStarParamConstPtr param(const PlannerContext& context) {
+    return std::static_pointer_cast<const InformedRRTStarParam>(
+        context.plannerParam);
 }
 } // namespace
 
-InformedRRTStar::InformedRRTStar(const SpaceInformationBasePtr& si, const ProblemDefinition& pd,
+InformedRRTStar::InformedRRTStar(const SpaceInformationBasePtr& si,
+                                 const ProblemDefinition& pd,
                                  const PlannerContext& context,
                                  const PlannerRecord::VisualFunction& vf,
                                  const PlannerRecord::VisualPoseFunction& vpf)
-    : Planner(si, pd), param_(*param(context)), vf_(vf), vpf_(vpf),
+    : Planner(si, pd),
+      param_(*param(context)),
+      vf_(vf),
+      vpf_(vpf),
       nearestNeighbor_(std::make_shared<NearestNeighborLinear>(si_->distance)),
-      prunedMeasure_(si_->getSpaceMeasure()), biRRT_(si, pd, toBirrtParam(param_), vf)
-{
-}
+      prunedMeasure_(si_->getSpaceMeasure()),
+      biRRT_(si, pd, toBirrtParam(param_), vf) {}
 
-const PlannerSolution& InformedRRTStar::solve()
-{
+const PlannerSolution& InformedRRTStar::solve() {
     auto feasibleSolution = findFeasiblePath();
 
     if (!feasibleSolution)
@@ -69,7 +71,8 @@ const PlannerSolution& InformedRRTStar::solve()
         const State& xNew = steer(xRand, vNearest->state, param_.stepSize);
 
         if (isValidEdge(vNearest->state, xNew)) {
-            std::vector<VertexPtr> vNearK = nearestNeighbor_->nearestK(xNew, k); // nearestK
+            std::vector<VertexPtr> vNearK =
+                nearestNeighbor_->nearestK(xNew, k); // nearestK
             VertexPtr vMin = vNearest;
             double eCostMin = edgeCost(vNearest->state, xNew);
             double sCostMin = vNearest->stateCost + eCostMin;
@@ -79,7 +82,8 @@ const PlannerSolution& InformedRRTStar::solve()
                 auto time1 = std::chrono::steady_clock::now();
                 bool validEdge = isValidEdge(vNear->state, xNew);
                 auto time2 = std::chrono::steady_clock::now();
-                isValidEdgetime += std::chrono::duration<double>(time2 - time1).count();
+                isValidEdgetime +=
+                    std::chrono::duration<double>(time2 - time1).count();
                 if (validEdge) { // time cost
                     double eCost = edgeCost(vNear->state, xNew);
                     double sCost = vNear->stateCost + eCost;
@@ -91,7 +95,8 @@ const PlannerSolution& InformedRRTStar::solve()
                     }
                 }
             }
-            const VertexPtr vNew = std::make_shared<Vertex>(vMin.get(), xNew, sCostMin, eCostMin);
+            const VertexPtr vNew =
+                std::make_shared<Vertex>(vMin.get(), xNew, sCostMin, eCostMin);
             addVertex(vNew);
             // visualize(vNew->state, vMin->state);
 
@@ -108,16 +113,19 @@ const PlannerSolution& InformedRRTStar::solve()
                         solution_.path = generatePath(vGoal);
                         // visualize(vNew->state, vNear->state);
                     } else
-                        std::cout << "###### removeChild error ######" << std::endl;
+                        std::cout << "###### removeChild error ######"
+                                  << std::endl;
 
                     if (vGoal->stateCost != goalCost) {
-                        // std::cout << "goalCost update " << goalCost << " to " << vGoal->stateCost
+                        // std::cout << "goalCost update " << goalCost << " to "
+                        // << vGoal->stateCost
                         //           << std::endl;
                         goalCost = vGoal->stateCost;
                         goalCostUpdated = true;
                         // visualize(vNew->state, vNear->state);
                         if (goalCost < costThreshold) {
-                            solution_.status = PlannerStatus::ApproximateSolution;
+                            solution_.status =
+                                PlannerStatus::ApproximateSolution;
                             solution_.cost = goalCost;
                             approximateSolution = true;
                             break;
@@ -144,27 +152,26 @@ const PlannerSolution& InformedRRTStar::solve()
     auto endTime = std::chrono::steady_clock::now();
     float time = std::chrono::duration<float>(endTime - startTime).count();
 
-    pt.informedRRTStar = std::chrono::duration<float>(endTime - startTime).count();
+    pt.informedRRTStar =
+        std::chrono::duration<float>(endTime - startTime).count();
 
-    std::cout << "informedRRT process time: " << time << " isValidEdgetime " << isValidEdgetime
-              << std::endl;
+    std::cout << "informedRRT process time: " << time << " isValidEdgetime "
+              << isValidEdgetime << std::endl;
     // visualize();
     return solution_;
 }
-void InformedRRTStar::visualize(const State& qNew, const State& qNear) const
-{
+void InformedRRTStar::visualize(const State& qNew, const State& qNear) const {
     vf_(plannerRecord());
     vpf_(qNew, Green, "new");
     vpf_(qNear, Purple, "near");
     std::this_thread::sleep_for(std::chrono::milliseconds(800));
 }
-void InformedRRTStar::visualize() const
-{
+void InformedRRTStar::visualize() const {
     vf_(plannerRecord());
     std::this_thread::sleep_for(std::chrono::milliseconds(800));
 }
-State InformedRRTStar::steer(const State& qSampled, const State& qNear, double stepSize) const
-{
+State InformedRRTStar::steer(const State& qSampled, const State& qNear,
+                             double stepSize) const {
     assert(qSampled.size() == qNear.size());
     State qNew;
     for (size_t i = 0; i < qNear.size(); i++) {
@@ -173,8 +180,7 @@ State InformedRRTStar::steer(const State& qSampled, const State& qNear, double s
     }
     return qNew;
 }
-void InformedRRTStar::prune(Tree& tree, double costThreshold)
-{
+void InformedRRTStar::prune(Tree& tree, double costThreshold) {
     std::vector<VertexPtr> leaves;
     bool finished = false;
 
@@ -193,25 +199,21 @@ void InformedRRTStar::prune(Tree& tree, double costThreshold)
         }
     }
 }
-double InformedRRTStar::heuristic(const VertexPtr& v) const
-{
+double InformedRRTStar::heuristic(const VertexPtr& v) const {
     double costToGoal = edgeCost(v->state, currentGoal_);
     return v->stateCost + costToGoal;
 }
-void InformedRRTStar::addVertex(const VertexPtr& v)
-{
+void InformedRRTStar::addVertex(const VertexPtr& v) {
     tree_.addVertex(v);
     nearestNeighbor_->update(v);
 }
-std::optional<BiRRT::Record> InformedRRTStar::findFeasiblePath()
-{
+std::optional<BiRRT::Record> InformedRRTStar::findFeasiblePath() {
     solution_ = biRRT_.solve();
     if (solution_.status == PlannerStatus::ExactSolution)
         return biRRT_.record();
     return {};
 }
-bool InformedRRTStar::initialCheck()
-{
+bool InformedRRTStar::initialCheck() {
     assert(goal_->type == GoalType::JointTolerance);
     start_.printState("start");
     currentGoal_ = goal_->sample().value();
@@ -237,33 +239,29 @@ bool InformedRRTStar::initialCheck()
 
     return true;
 }
-void InformedRRTStar::updateNN(NearestNeighborBasePtr& nn, const VertexPtr& v)
-{
+void InformedRRTStar::updateNN(NearestNeighborBasePtr& nn, const VertexPtr& v) {
     nn->update(v);
     for (const auto& child : v->children())
         updateNN(nn, child);
 }
-void InformedRRTStar::initNearestNeighbor(const Tree& tree)
-{
+void InformedRRTStar::initNearestNeighbor(const Tree& tree) {
     nearestNeighbor_->build(tree.root());
     for (const auto& child : tree.root()->children())
         updateNN(nearestNeighbor_, child);
 }
-bool InformedRRTStar::isValidEdge(const State& q1, const State& q2) const
-{
+bool InformedRRTStar::isValidEdge(const State& q1, const State& q2) const {
     if (si_->checkers->isValid(q2)) {
-        if (si_->localPlanner->validInterpolatePath(q1, q2, param_.localPlannerStepSizeJps,
-                                                    param_.localPlannerStepSizeTcp))
+        if (si_->localPlanner->validInterpolatePath(
+                q1, q2, param_.localPlannerStepSizeJps,
+                param_.localPlannerStepSizeTcp))
             return true;
     }
     return false;
 }
-double InformedRRTStar::edgeCost(const State& q1, const State& q2) const
-{
+double InformedRRTStar::edgeCost(const State& q1, const State& q2) const {
     return si_->distance->distance(q1, q2);
 }
-Path InformedRRTStar::generatePath(const VertexPtr& v) const
-{
+Path InformedRRTStar::generatePath(const VertexPtr& v) const {
     Path path;
     path.push_back(v->state);
     auto currentV = v.get();
@@ -276,8 +274,7 @@ Path InformedRRTStar::generatePath(const VertexPtr& v) const
     return path;
 }
 
-PlannerRecord InformedRRTStar::plannerRecord() const
-{
+PlannerRecord InformedRRTStar::plannerRecord() const {
     PlannerRecord pr;
     pr.start = start_;
     pr.goal = currentGoal_;
@@ -288,24 +285,23 @@ PlannerRecord InformedRRTStar::plannerRecord() const
     return pr;
 }
 
-double InformedRRTStar::kRRT(double rewireFactor) const
-{
+double InformedRRTStar::kRRT(double rewireFactor) const {
     // k_rrt > 2^(d + 1) * e * (1 + 1 / d).  K-nearest RRT*
     const double dim = static_cast<double>(si_->dimension);
     return rewireFactor * (std::pow(2, dim + 1) * M_E * (1.0 + 1.0 / dim));
 }
-double InformedRRTStar::rRRT(double rewireFactor) const
-{
+double InformedRRTStar::rRRT(double rewireFactor) const {
     // r_rrt > (2*(1+1/d))^(1/d)*(measure/ballvolume)^(1/d)
     // If we're not using the informed measure, prunedMeasure_ will be set to
     // si_->getSpaceMeasure();
     const double dim = static_cast<double>(si_->dimension);
     return rewireFactor *
-           std::pow(2 * (1.0 + 1.0 / dim) * (prunedMeasure_ / unitNBallMeasure(si_->dimension)),
+           std::pow(2 * (1.0 + 1.0 / dim) *
+                        (prunedMeasure_ / unitNBallMeasure(si_->dimension)),
                     1.0 / dim);
 }
-BiRRTParam InformedRRTStar::toBirrtParam(const InformedRRTStarParam& param) const
-{
+BiRRTParam InformedRRTStar::toBirrtParam(
+    const InformedRRTStarParam& param) const {
     return BiRRTParam(param_.biRRTParam);
 }
 } // namespace gsmpl

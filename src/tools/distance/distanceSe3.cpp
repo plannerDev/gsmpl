@@ -3,8 +3,7 @@
 #include "distanceSe3.h"
 
 namespace gsmpl {
-double DistanceSe3::distance(const State& q1, const State& q2) const
-{
+double DistanceSe3::distance(const State& q1, const State& q2) const {
     assert(q1.size() == dimension);
     assert(q2.size() == dimension);
 

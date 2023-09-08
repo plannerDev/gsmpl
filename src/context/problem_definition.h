@@ -6,8 +6,7 @@
 #include "optimization_objective.h"
 
 namespace gsmpl {
-struct ProblemDefinition
-{
+struct ProblemDefinition {
     State start;
     GoalBasePtr goal;
     OptiObjectiveBasePtr optObj;

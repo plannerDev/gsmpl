@@ -2,8 +2,7 @@
 #include "planner_record.h"
 
 namespace gsmpl {
-Tree PlannerRecord::pathToTree(const Path& path) const
-{
+Tree PlannerRecord::pathToTree(const Path& path) const {
     Tree tree;
     if (path.size() < 1)
         return tree;

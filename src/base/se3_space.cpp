@@ -2,12 +2,12 @@
 
 namespace gsmpl {
 // s1: se3 s2: se3 translation part distance
-double Se3Space::distanceTrans(const Eigen::Isometry3d& p1, const Eigen::Isometry3d& p2) const
-{
+double Se3Space::distanceTrans(const Eigen::Isometry3d& p1,
+                               const Eigen::Isometry3d& p2) const {
     return (p2.translation() - p1.translation()).norm();
 }
-bool Se3Space::isEquivalent(const Eigen::Isometry3d& p1, const Eigen::Isometry3d& p2) const
-{
+bool Se3Space::isEquivalent(const Eigen::Isometry3d& p1,
+                            const Eigen::Isometry3d& p2) const {
     Eigen::Vector3d v1(p1.translation());
     Eigen::Vector3d v2(p2.translation());
     Eigen::Quaterniond quat1(p1.rotation());
@@ -21,10 +21,9 @@ bool Se3Space::isEquivalent(const Eigen::Isometry3d& p1, const Eigen::Isometry3d
             return true;
     return false;
 }
-std::optional<Se3Space::SE3Poses> Se3Space::InterpolatePath(const Eigen::Isometry3d& p1,
-                                                            const Eigen::Isometry3d& p2,
-                                                            double stepSize) const
-{
+std::optional<Se3Space::SE3Poses> Se3Space::InterpolatePath(
+    const Eigen::Isometry3d& p1, const Eigen::Isometry3d& p2,
+    double stepSize) const {
     SE3Poses poses;
     double distance = distanceTrans(p1, p2);
 
@@ -39,9 +38,9 @@ std::optional<Se3Space::SE3Poses> Se3Space::InterpolatePath(const Eigen::Isometr
     return poses;
 }
 
-Eigen::Isometry3d Se3Space::interpolateSe3(const Eigen::Isometry3d& p1, const Eigen::Isometry3d& p2,
-                                           double time) const
-{
+Eigen::Isometry3d Se3Space::interpolateSe3(const Eigen::Isometry3d& p1,
+                                           const Eigen::Isometry3d& p2,
+                                           double time) const {
     Eigen::Vector3d v1 = p1.translation();
     Eigen::Vector3d v2 = p2.translation();
     Eigen::Vector3d v = (1 - time) * v1 + time * v2;
@@ -55,8 +54,7 @@ Eigen::Isometry3d Se3Space::interpolateSe3(const Eigen::Isometry3d& p1, const Ei
     return pose;
 }
 
-Eigen::Isometry3d Se3Space::state2Se3(const State& q) const
-{
+Eigen::Isometry3d Se3Space::state2Se3(const State& q) const {
     assert(q.size() == 7);
     auto pose = Eigen::Isometry3d::Identity();
     Eigen::Vector3d v(q[0], q[1], q[2]);
@@ -66,8 +64,7 @@ Eigen::Isometry3d Se3Space::state2Se3(const State& q) const
     return pose;
 }
 
-State Se3Space::se32State(const Eigen::Isometry3d& p) const
-{
+State Se3Space::se32State(const Eigen::Isometry3d& p) const {
     Eigen::Vector3d v = p.translation();
     Eigen::Quaterniond quat(p.rotation());
     return State({v[0], v[1], v[2], quat.w(), quat.x(), quat.y(), quat.z()});

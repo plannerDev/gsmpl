@@ -10,8 +10,7 @@ GSMPL_STRUCT_FORWARD(State)
 
 enum class JointType { Revolute, Prismatic };
 
-struct EXPORT State
-{
+struct EXPORT State {
     State(const std::vector<double>& v) : values(v) {}
     State(size_t size) { reserve(size); }
     State() = default;
@@ -24,8 +23,7 @@ struct EXPORT State
 
     double operator[](std::size_t index) const { return values[index]; }
 
-    void printState(const std::string& desc = {}) const
-    {
+    void printState(const std::string& desc = {}) const {
         std::cout << desc << std::endl;
         for (const auto& v : values)
             std::cout << v << ", ";

@@ -7,8 +7,7 @@
 namespace gsmpl {
 GSMPL_CLASS_FORWARD(StateCheckerBase)
 
-class EXPORT StateCheckerBase
-{
+class EXPORT StateCheckerBase {
 public:
     virtual ~StateCheckerBase() = default;
     virtual bool isValid(const State& q) { return true; }; // TODO: const

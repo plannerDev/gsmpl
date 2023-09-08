@@ -6,20 +6,17 @@
 namespace gsmpl {
 GSMPL_CLASS_FORWARD(NearestNeighborSqrtApprox)
 
-class NearestNeighborSqrtApprox : public NearestNeighborLinear
-{
+class NearestNeighborSqrtApprox : public NearestNeighborLinear {
 public:
-    NearestNeighborSqrtApprox(const DistanceBasePtr& distance) : NearestNeighborLinear(distance)
-    {
-    }
+    NearestNeighborSqrtApprox(const DistanceBasePtr& distance)
+        : NearestNeighborLinear(distance) {}
 
     void build(const VertexPtr& root) override;
     void update(const VertexPtr& v) override;
     VertexPtr nearest(const State& q) const override;
 
 private:
-    inline void updateCheckCount()
-    {
+    inline void updateCheckCount() {
         checks_ = 1 + (std::size_t)floor(sqrt((double)vertexes_.size()));
     }
 

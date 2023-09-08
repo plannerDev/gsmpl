@@ -7,8 +7,7 @@
 namespace gsmpl {
 GSMPL_CLASS_FORWARD(ProlateHyperspheroid)
 
-struct PhsData
-{
+struct PhsData {
     std::size_t dim;
     double minCost;
     double cost;
@@ -20,10 +19,10 @@ struct PhsData
     Eigen::MatrixXd transformation; // C_we * L
 };
 
-class ProlateHyperspheroid
-{
+class ProlateHyperspheroid {
 public:
-    ProlateHyperspheroid(std::size_t dim, const double focus1[], const double focus2[]);
+    ProlateHyperspheroid(std::size_t dim, const double focus1[],
+                         const double focus2[]);
 
     void setCost(double cost);
     std::vector<double> transform(const std::vector<double>& ball) const;
@@ -38,18 +37,17 @@ private:
     PhsData data_;
 };
 
-class PathLengthDirectInfSampler
-{
+class PathLengthDirectInfSampler {
 public:
     PathLengthDirectInfSampler(const State& start, const State& goal)
-        : dim(start.size()), phs_(start.size(), start.values.data(), goal.values.data())
-    {
+        : dim(start.size()),
+          phs_(start.size(), start.values.data(), goal.values.data()) {
         assert(start.size() == goal.size());
     }
-    ~PathLengthDirectInfSampler()
-    {
-        std::cout << " PathLengthDirectInfSampler Processing time: " << time_ << " times: " << times_
-                  << " averageTime: " << time_ / times_ << std::endl;
+    ~PathLengthDirectInfSampler() {
+        std::cout << " PathLengthDirectInfSampler Processing time: " << time_
+                  << " times: " << times_ << " averageTime: " << time_ / times_
+                  << std::endl;
     }
 
     State sample(double cost);

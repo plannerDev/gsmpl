@@ -5,10 +5,8 @@
 #include "path.h"
 
 namespace gsmpl {
-struct Trajectory
-{
-    // struct Waypoint
-    // {
+struct Trajectory {
+    // struct Waypoint {
     //     State jps;
     //     double timestamp;
     // };
@@ -18,10 +16,10 @@ struct Trajectory
     Waypoints waypoints;
     std::vector<Segment> segments;
 
-    void print() const
-    {
+    void print() const {
         for (int i = 0; i < waypoints.size() - 1; i++) {
-            std::cout << "segment" << i << " size " << segments[i].size() << std::endl;
+            std::cout << "segment" << i << " size " << segments[i].size()
+                      << std::endl;
         }
     }
 };

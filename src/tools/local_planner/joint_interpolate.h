@@ -11,26 +11,25 @@
 namespace gsmpl {
 GSMPL_CLASS_FORWARD(JointInterpolate)
 
-class JointInterpolate : public LocalPlannerBase
-{
+class JointInterpolate : public LocalPlannerBase {
 public:
-    JointInterpolate(const DistanceBasePtr& distance, const StateCheckerBasePtr& checker,
-                     const FKBasePtr fk)
-        : LocalPlannerBase(distance, checker), fk_(fk)
-    {
+    JointInterpolate(const DistanceBasePtr& distance,
+                     const StateCheckerBasePtr& checker, const FKBasePtr fk)
+        : LocalPlannerBase(distance, checker), fk_(fk) {}
+
+    ~JointInterpolate() {
+        std::cout << " JointInterpolate Processing time: " << time_
+                  << " times: " << times_ << " averageTime: " << time_ / times_
+                  << std::endl;
     }
 
-    ~JointInterpolate()
-    {
-        std::cout << " JointInterpolate Processing time: " << time_ << " times: " << times_
-                  << " averageTime: " << time_ / times_ << std::endl;
-    }
-
-    State interpolateState(const State& q1, const State& q2, double time) const override;
+    State interpolateState(const State& q1, const State& q2,
+                           double time) const override;
     std::optional<State> validInterpolateState(const State& q1, const State& q2,
                                                double time) const override;
     // stepSize: TCP pose L2 norm distance
-    std::optional<Path> validInterpolatePath(const State& q1, const State& q2, double jpsStepSize,
+    std::optional<Path> validInterpolatePath(const State& q1, const State& q2,
+                                             double jpsStepSize,
                                              double tcpStepSize) const override;
     Path interpolatePath(const State& q1, const State& q2, double jpsStepSize,
                          double tcpStepSize) const override;

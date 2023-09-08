@@ -7,8 +7,7 @@
 #include "rrt_param.h"
 
 namespace gsmpl {
-class RRT : public Planner
-{
+class RRT : public Planner {
 public:
     enum Status { Reached, Advanced, Trapped };
 
@@ -22,7 +21,8 @@ public:
 private:
     std::optional<VertexPtr> extend(const State& qSampled);
     void update(const VertexPtr& edge);
-    State newState(const State& qSampled, const State& qNear, double stepSize) const;
+    State newState(const State& qSampled, const State& qNear,
+                   double stepSize) const;
     Path generatePath(const VertexPtr& v) const;
 
     RRTParam param_;

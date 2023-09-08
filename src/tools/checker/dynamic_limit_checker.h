@@ -6,8 +6,7 @@
 namespace gsmpl {
 GSMPL_CLASS_FORWARD(DynamicLimitChecker)
 
-class DynamicLimitChecker : public StateCheckerBase
-{
+class DynamicLimitChecker : public StateCheckerBase {
 public:
     DynamicLimitChecker() : StateCheckerBase() {}
     bool isValid(const State& q) override { return true; };

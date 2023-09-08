@@ -2,8 +2,7 @@
 #include "path.h"
 
 namespace gsmpl {
-double pathLength(const Path& path, const DistanceBasePtr distance)
-{
+double pathLength(const Path& path, const DistanceBasePtr distance) {
     assert(path.size() > 1);
     assert(distance);
     double length = 0.0;
@@ -15,8 +14,8 @@ double pathLength(const Path& path, const DistanceBasePtr distance)
     }
     return length;
 }
-void printPath(const Path& path)
-{
+
+void printPath(const Path& path) {
     for (const auto& p : path)
         p.printState();
 }

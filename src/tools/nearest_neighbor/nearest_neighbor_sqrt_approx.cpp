@@ -5,20 +5,17 @@
 #include "nearest_neighbor_sqrt_approx.h"
 
 namespace gsmpl {
-void NearestNeighborSqrtApprox::build(const VertexPtr& root)
-{
+void NearestNeighborSqrtApprox::build(const VertexPtr& root) {
     NearestNeighborLinear::build(root);
     updateCheckCount();
 }
 
-void NearestNeighborSqrtApprox::update(const VertexPtr& v)
-{
+void NearestNeighborSqrtApprox::update(const VertexPtr& v) {
     NearestNeighborLinear::update(v);
     updateCheckCount();
 }
 
-VertexPtr NearestNeighborSqrtApprox::nearest(const State& q)const
-{
+VertexPtr NearestNeighborSqrtApprox::nearest(const State& q) const {
     auto startTime = std::chrono::steady_clock::now();
     assert(vertexes_.size() >= 1);
     double cost = std::numeric_limits<double>::max();

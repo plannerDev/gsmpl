@@ -11,19 +11,18 @@
 namespace gsmpl {
 GSMPL_CLASS_FORWARD(StateCheckerGroup)
 
-class EXPORT StateCheckerGroup : public StateCheckerBase
-{
+class EXPORT StateCheckerGroup : public StateCheckerBase {
 public:
-    StateCheckerGroup(const Bounds& b)
-    {
+    StateCheckerGroup(const Bounds& b) {
         checkers_.push_back(std::make_shared<BoundsChecker>(b));
         checkers_.push_back(std::make_shared<DynamicLimitChecker>());
     }
 
-    void addChecker(const StateCheckerBasePtr& checker) { checkers_.push_back(checker); }
+    void addChecker(const StateCheckerBasePtr& checker) {
+        checkers_.push_back(checker);
+    }
 
-    bool isValid(const State& q) override
-    {
+    bool isValid(const State& q) override {
         for (auto& checker : checkers_)
             if (!checker->isValid(q))
                 return false;
