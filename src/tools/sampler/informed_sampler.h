@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Eigen/Geometry>
-#include "../base/math_utility.h"
+#include "../../base/math_utility.h"
 #include "sampler.h"
 
 namespace gsmpl {
