@@ -1,6 +1,7 @@
-file(GLOB_RECURSE SOURCE_FILES "*.cpp" "base/*.cpp" 
+file(GLOB_RECURSE SOURCE_FILES "*.cpp" "base/*.cpp"
     "context/*.cpp" "goal/*.cpp" "planner_data/*.cpp" "robot_algo/*.cpp"
-    "rrt/*.cpp" "bi_rrt/*.cpp" "rrt_star/*.cpp" "informed_rrt_star/*.cpp" "tools/checker/*.cpp" "tools/distance/*.cpp"
+    "planner/*.cpp" "planner/rrt/*.cpp" "planner/bi_rrt/*.cpp" "planner/rrt_star/*.cpp" 
+    "planner/informed_rrt_star/*.cpp" "tools/checker/*.cpp" "tools/distance/*.cpp"
     "tools/local_planner/*.cpp" "tools/nearest_neighbor/*.cpp"
     "tools/path_simplifier/*.cpp" "tools/sampler/*.cpp"
     "utility/*.cpp")
@@ -22,10 +23,10 @@ set(INCLUDE_DIRS
     goal
     planner_data
     robot_algo
-    rrt
-    bi_rrt
-    rrt_star
-    informed_rrt_star
+    planner/rrt
+    planner/bi_rrt
+    planner/rrt_star
+    planner/informed_rrt_star
     tools/checker
     tools/distance
     tools/local_planner
@@ -43,3 +44,4 @@ foreach(dir ${INCLUDE_DIRS})
     install(FILES ${headers} DESTINATION ${INSTALL_DIR}/include/${dir})
 endforeach()
 install(FILES planner_interface.h DESTINATION ${INSTALL_DIR}/include)
+install(FILES planner/planner.h DESTINATION ${INSTALL_DIR}/include/planner)

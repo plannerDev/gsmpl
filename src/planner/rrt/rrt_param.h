@@ -1,40 +1,42 @@
 #pragma once
 
 #include <cstddef>
-#include "../planner_data/planner_param.h"
-#include "../utility/class_forward.h"
+#include "../../utility/class_forward.h"
+#include "../../planner_data/planner_param.h"
 
 namespace gsmpl {
-GSMPL_STRUCT_FORWARD(BiRRTParam)
+GSMPL_STRUCT_FORWARD(RRTParam)
 
-struct BiRRTParam : public PlannerParamBase {
+struct RRTParam : public PlannerParamBase {
 public:
-    BiRRTParam(std::size_t dim, unsigned int stepsP, double stepSizeP,
-               double lpStepSizeJps, double lpStepSizeTcp, double connectRange)
+    RRTParam(std::size_t dim, unsigned int stepsP, double stepSizeP,
+             double lpStepSizeJps, double lpStepSizeTcp, double gt, double gb)
         : dimension(dim),
           steps(stepsP),
           stepSize(stepSizeP),
           localPlannerStepSizeJps(lpStepSizeJps),
           localPlannerStepSizeTcp(lpStepSizeTcp),
-          connectionRange(connectRange) {}
+          goalThreshold(gt),
+          goalBias(gb) {}
 
-    const std::size_t dimension;
-    const unsigned int steps;
-    const double stepSize;
-    const double localPlannerStepSizeJps;
-    const double localPlannerStepSizeTcp;
-    const double connectionRange;
+    std::size_t dimension;
+    unsigned int steps;
+    double stepSize;
+    double localPlannerStepSizeJps;
+    double localPlannerStepSizeTcp;
+    double goalThreshold;
+    double goalBias; // The fraction of time the goal is picked as the state to
+                     // expand towards (if such a state is available)
 };
 } // namespace gsmpl
-namespace bi_rrt {
+namespace rrt {
 constexpr unsigned int RRT_MAX_STEPS = 50000;
 constexpr double LOCAL_PLANNER_SETP_SIZE_TCP = 0.01;  // 1cm
 constexpr double LOCAL_PLANNER_SETP_SIZE_JPS = 0.035; // 0.035; // 2deg
-constexpr double RRT_STEP_SIZE = LOCAL_PLANNER_SETP_SIZE_JPS * 7;
-constexpr double CONNECTION_RANGE = RRT_STEP_SIZE * 7;
-constexpr double COST_THRESHOLD = 50.0;
-constexpr double GOAL_THRESHOLD = 0.0;
+constexpr double RRT_STEP_SIZE = LOCAL_PLANNER_SETP_SIZE_JPS * 20;
+constexpr double GOAL_THRESHOLD = 0.05;
 constexpr double GOAL_BIAS = 0.05;
+constexpr double COST_THRESHOLD = 50.0;
 constexpr double CONE_THRESHOLD = 0.3; // 0.3rad = 17deg
 
 constexpr unsigned int PATH_SIMPLIFIER_MAX_EMPTY_STEPS = 10;
@@ -46,4 +48,4 @@ constexpr double PATH_SIMPLIFIER_SMOOTH_BSPLINE_MIN_CHANGE =
 constexpr unsigned int PATH_SIMPLIFIER_COLLAPSE_CLOSE_VERTICES_MAX_STEPS = 0;
 
 constexpr unsigned int SAMPLER_ATTEMPTS = 10;
-} // namespace bi_rrt
+} // namespace rrt

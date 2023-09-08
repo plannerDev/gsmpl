@@ -8,8 +8,8 @@
 #include "../planner_data/planner_param.h"
 #include "../utility/class_forward.h"
 #include "../tools/checker/state_checker_base.h"
-#include "space_information.h"
-#include "problem_definition.h"
+#include "../context/space_information.h"
+#include "../context/problem_definition.h"
 #include "../planner_data/planner_context.h"
 
 namespace gsmpl {

@@ -1,11 +1,11 @@
 #pragma once
 
 #include <optional>
-#include "../context/planner.h"
-#include "../tools/nearest_neighbor/nearest_neighbor.h"
-#include "../planner_data/planner_record.h"
+#include "../planner.h"
+#include "../../tools/nearest_neighbor/nearest_neighbor.h"
+#include "../../planner_data/planner_record.h"
+#include "../../tools/sampler/informed_sampler.h"
 #include "../bi_rrt/bi_rrt.h"
-#include "../tools/sampler/informed_sampler.h"
 #include "informed_rrt_star_param.h"
 
 namespace gsmpl {

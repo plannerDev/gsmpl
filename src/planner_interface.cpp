@@ -1,10 +1,6 @@
 #include <chrono>
 #include <memory>
 #include "assert.h"
-#include "rrt/rrt.h"
-#include "bi_rrt/bi_rrt.h"
-#include "rrt_star/rrt_star.h"
-#include "informed_rrt_star/informed_rrt_star.h"
 #include "base/tree.h"
 #include "planner_interface.h"
 #include "utility/global.h"

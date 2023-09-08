@@ -2,10 +2,10 @@
 #include <thread>
 #include <math.h>
 #include <utility>
-#include "../utility/log_utility.h"
-#include "../utility/global.h"
-#include "../base/math_utility.h"
-#include "../tools/nearest_neighbor/nearest_neighbor_linear.h"
+#include "../../utility/log_utility.h"
+#include "../../utility/global.h"
+#include "../../base/math_utility.h"
+#include "../../tools/nearest_neighbor/nearest_neighbor_linear.h"
 #include "bi_rrt.h"
 
 namespace gsmpl {

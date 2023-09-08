@@ -1,9 +1,9 @@
 #pragma once
 
 #include <optional>
-#include "../context/planner.h"
-#include "../tools/nearest_neighbor/nearest_neighbor.h"
-#include "../planner_data/planner_record.h"
+#include "../planner.h"
+#include "../../tools/nearest_neighbor/nearest_neighbor.h"
+#include "../../planner_data/planner_record.h"
 #include "rrt_param.h"
 
 namespace gsmpl {

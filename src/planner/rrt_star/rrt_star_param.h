@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstddef>
-#include "../utility/class_forward.h"
-#include "../planner_data/planner_param.h"
+#include "../../utility/class_forward.h"
+#include "../../planner_data/planner_param.h"
 
 namespace gsmpl {
 GSMPL_STRUCT_FORWARD(RRTStarParam)

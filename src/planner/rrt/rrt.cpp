@@ -1,7 +1,7 @@
 #include <math.h>
-#include "../utility/log_utility.h"
-#include "../base/math_utility.h"
-#include "../tools/nearest_neighbor/nearest_neighbor_linear.h"
+#include "../../utility/log_utility.h"
+#include "../../base/math_utility.h"
+#include "../../tools/nearest_neighbor/nearest_neighbor_linear.h"
 #include "rrt.h"
 
 namespace gsmpl {

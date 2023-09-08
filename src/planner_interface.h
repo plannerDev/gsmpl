@@ -4,12 +4,13 @@
 #include "planner_data/planner_param.h"
 #include "planner_data/planner_record.h"
 #include "utility/export.h"
-#include "context/planner.h"
+#include "planner/planner.h"
 #include "context/problem_definition.h"
 #include "context/space_information.h"
-#include "rrt/rrt.h"
-#include "rrt_star/rrt_star.h"
-#include "bi_rrt/bi_rrt.h"
+#include "planner/rrt/rrt.h"
+#include "planner/rrt_star/rrt_star.h"
+#include "planner/bi_rrt/bi_rrt.h"
+#include "planner/informed_rrt_star/informed_rrt_star.h"
 
 namespace gsmpl {
 class EXPORT PlannerInterface {

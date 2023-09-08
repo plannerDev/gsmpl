@@ -1,8 +1,8 @@
 #pragma once
 
 #include <optional>
-#include "../context/planner.h"
-#include "../tools/nearest_neighbor/nearest_neighbor.h"
+#include "../planner.h"
+#include "../../tools/nearest_neighbor/nearest_neighbor.h"
 #include "bi_rrt_param.h"
 
 namespace gsmpl {
