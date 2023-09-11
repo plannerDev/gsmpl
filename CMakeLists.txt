@@ -76,7 +76,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 install(
   TARGETS ${PROJECT_NAME}
-  EXPORT CartographerExport
+  EXPORT GsmplExport
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -90,6 +90,25 @@ foreach(HDR ${ALL_LIBRARY_HDRS})
     DESTINATION include/${DIR}
   )
 endforeach()
+
+set(GSMPL_CMAKE_DIR share/gsmpl/cmake)
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+  gsmpl-config.cmake.in
+  ${PROJECT_BINARY_DIR}/cmake/gsmpl/gsmpl-config.cmake
+  PATH_VARS GSMPL_CMAKE_DIR
+  INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/share/gsmpl
+)
+install(
+  EXPORT GsmplExport
+  DESTINATION share/gsmpl/cmake/
+  FILE GSMPLTargets.cmake
+)
+
+install(
+  FILES ${PROJECT_BINARY_DIR}/cmake/gsmpl/gsmpl-config.cmake
+  DESTINATION share/gsmpl/
+)
 
 # set(INCLUDE_DIRS
 #     base
