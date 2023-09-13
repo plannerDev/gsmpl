@@ -21,6 +21,7 @@
 @PACKAGE_INIT@
 
 set_and_check(GSMPL_CMAKE_DIR "@PACKAGE_GSMPL_CMAKE_DIR@")
+list(APPEND gsmpl_INCLUDE_DIRS ${PACKAGE_PREFIX_DIR}/include ${PACKAGE_PREFIX_DIR}/include/gsmpl)
 
 include("${GSMPL_CMAKE_DIR}/GSMPLTargets.cmake")
 
