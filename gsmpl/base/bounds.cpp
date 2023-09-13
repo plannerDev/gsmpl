@@ -39,7 +39,7 @@ State Bounds::mappingBack(const State &q) const {
     assert(size() == q.size());
     State out(size());
     for (std::size_t i = 0; i < q.size(); i++)
-        out.push_back(bounds_[i].mappingBack(q[i]));
+        out.position.push_back(bounds_[i].mappingBack(q[i]));
     return out;
 }
 std::optional<State> Bounds::mapping(const State &q) const {
@@ -47,7 +47,7 @@ std::optional<State> Bounds::mapping(const State &q) const {
     State out(size());
     for (std::size_t i = 0; i < q.size(); i++) {
         if (auto temp = bounds_[i].mapping(q[i]))
-            out.push_back(temp.value());
+            out.position.push_back(temp.value());
         else
             return {};
     }

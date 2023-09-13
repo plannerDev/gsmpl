@@ -19,8 +19,9 @@ PlannerInterface::PlannerInterface(const PlannerContext &context,
 void PlannerInterface::allocSi(const PlannerContext &context) {
     auto sampler_param = std::static_pointer_cast<const SampleWithBiasParam>(
         context.sampler_param);
-    si_ = std::make_shared<SpaceInformation>(
-        context.general_param, *sampler_param, pd_, context.checkers, context.fk);
+    si_ = std::make_shared<SpaceInformation>(context.general_param,
+                                             *sampler_param, pd_,
+                                             context.checkers, context.fk);
 }
 
 bool PlannerInterface::allocPlanner(const PlannerContext &context) {
@@ -64,8 +65,14 @@ bool PlannerInterface::plan(PlannerSolution &solution) {
             si_->simplifyPath(solution.path, param_.path_simplifier);
         auto endTime2 = std::chrono::steady_clock::now();
 
-        solution.trajectory = simplifierSolution.simplified_2;
-        solution.path = simplifierSolution.simplified_2.waypoints;
+        std::cout << "PlannerInterface Trajectory start" << std::endl;
+        solution.trajectory = Trajectory(
+            si_->local_planner, simplifierSolution.simplified_2,
+            param_.traj_processing.step_size_jps,
+            param_.traj_processing.stepSizeTcp, param_.traj_processing.dt);
+        std::cout << "PlannerInterface Trajectory end" << std::endl;
+        
+        solution.path = simplifierSolution.simplified_2;
 
         auto endTime3 = std::chrono::steady_clock::now();
         pt.planner =
@@ -75,10 +82,10 @@ bool PlannerInterface::plan(PlannerSolution &solution) {
         pt.pathProcessing =
             std::chrono::duration<float>(endTime2 - startTime2).count();
         pt.print();
-        record_.addPath(simplifierSolution.simplified.waypoints, "simplified");
-        record_.addPath(simplifierSolution.smoothed.waypoints, "smoothed");
-        record_.addPath(simplifierSolution.simplified_2.waypoints,
-                        "simplified_2");
+        record_.addPath(simplifierSolution.simplified, "simplified");
+        record_.addPath(simplifierSolution.smoothed, "smoothed");
+        record_.addPath(simplifierSolution.simplified_2, "simplified_2");
+        record_.addPath(solution.trajectory.dense_waypoints, "dense_waypoints");
         vf_(record_);
         return true;
     }

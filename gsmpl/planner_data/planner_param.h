@@ -17,10 +17,16 @@ struct PathSimplifierParamters {
     double smoothBSplineMinChange;
     unsigned int collapseCloseVerticesMaxSteps;
 };
+struct TrajectoryProcessingParamters {
+    double step_size_jps;
+    double stepSizeTcp;
+    double dt;
+};
 
 struct PlannerGeneralParamters {
     std::size_t dimension;
     PathSimplifierParamters path_simplifier;
+    TrajectoryProcessingParamters traj_processing;
     Bounds bounds;
     double coneThreshold; // rad
 };

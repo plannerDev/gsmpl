@@ -147,20 +147,4 @@ Path PathSimplifier::smoothBSpline(const Path& rawPath, unsigned int maxSteps,
     }
     return newPath;
 }
-
-Trajectory PathSimplifier::generateTrajector(const Path& path,
-                                             double step_size_jps,
-                                             double stepSizeTcp) const {
-    assert(path.size() > 1);
-
-    Trajectory trajectory;
-    trajectory.waypoints = path;
-    for (int i = 1; i < path.size(); i++) {
-        Trajectory::Segment segment;
-        segment = localPlanner_->interpolatePath(path[i - 1], path[i],
-                                                 step_size_jps, stepSizeTcp);
-        trajectory.segments.push_back(segment);
-    }
-    return trajectory;
-}
 } // namespace gsmpl

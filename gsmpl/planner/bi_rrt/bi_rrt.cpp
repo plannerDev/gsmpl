@@ -189,7 +189,7 @@ State BiRRT::newState(const State& qSampled, const State& qNear,
 
     for (size_t i = 0; i < qNear.size(); i++) {
         double delta = step_size * sign(normalizeAngle(qSampled[i] - qNear[i]));
-        qNew.push_back(delta + qNear[i]);
+        qNew.position.push_back(delta + qNear[i]);
     }
     return qNew;
 }

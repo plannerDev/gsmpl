@@ -41,7 +41,7 @@ class PathLengthDirectInfSampler {
 public:
     PathLengthDirectInfSampler(const State& start, const State& goal)
         : dim(start.size()),
-          phs_(start.size(), start.values.data(), goal.values.data()) {
+          phs_(start.size(), start.position.data(), goal.position.data()) {
         assert(start.size() == goal.size());
     }
     ~PathLengthDirectInfSampler() {

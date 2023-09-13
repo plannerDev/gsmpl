@@ -5,7 +5,7 @@
 #include "gsmpl/base/path.h"
 #include "gsmpl/utility/log_utility.h"
 #include "gsmpl/utility/export.h"
-#include "gsmpl/base/trajectory.h"
+#include "gsmpl/tools/trajectory_processing/trajectory.h"
 #include "gsmpl/planner_data/planner_param.h"
 
 namespace gsmpl {

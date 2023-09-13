@@ -33,56 +33,44 @@ PathSimplifier::SolutionRecord SpaceInformation::simplifyPath(
     PathSimplifier::SolutionRecord solution;
     pt.rrtStarPathLength = pathLength(rawPath, distance);
     pt.rrtStarPathSize = rawPath.size();
-    Path simplifiedPath = path_simplifier.reduceVertices(
+    solution.simplified = path_simplifier.reduceVertices(
         rawPath, param.step_size_jps, param.stepSizeTcp,
         param.reduceVerticesMaxSteps, param.maxEmptySteps,
         param.reduceVerticesRangeRatio);
-    solution.simplified = path_simplifier.generateTrajector(
-        simplifiedPath, param.step_size_jps, param.stepSizeTcp);
+    
     LOGD("simplified waypoints size:%d",
-         static_cast<int>(solution.simplified.waypoints.size()));
+         static_cast<int>(solution.simplified.size()));
     std::cout << "simplified waypoints size: "
-              << solution.simplified.waypoints.size() << " length: "
-              << pathLength(solution.simplified.waypoints, distance)
+              << solution.simplified.size() << " length: "
+              << pathLength(solution.simplified, distance)
               << std::endl;
-    auto smoothedPath = path_simplifier.smoothBSpline(
-        solution.simplified.waypoints, param.smoothBSplineMaxSteps,
+    solution.smoothed = path_simplifier.smoothBSpline(
+        solution.simplified, param.smoothBSplineMaxSteps,
         param.smoothBSplineMinChange, param.step_size_jps, param.stepSizeTcp);
-    solution.smoothed = path_simplifier.generateTrajector(
-        smoothedPath, param.step_size_jps, param.stepSizeTcp);
+    
     LOGD("smoothed waypoints size:%d",
-         static_cast<int>(solution.smoothed.waypoints.size()));
+         static_cast<int>(solution.smoothed.size()));
     std::cout << "smoothed waypoints size: "
-              << solution.smoothed.waypoints.size() << " length: "
-              << pathLength(solution.smoothed.waypoints, distance) << std::endl;
+              << solution.smoothed.size() << " length: "
+              << pathLength(solution.smoothed, distance) << std::endl;
 
-    Path simplifiedPath_2 = smoothedPath;
+    solution.simplified_2 = solution.smoothed;
     int i = 0;
-    while (simplifiedPath_2.size() > 10 && i < 10) {
-        simplifiedPath_2 = path_simplifier.reduceVertices(
-            solution.smoothed.waypoints, param.step_size_jps, param.stepSizeTcp,
+    while (solution.simplified_2.size() > 10 && i < 10) {
+        solution.simplified_2 = path_simplifier.reduceVertices(
+            solution.simplified_2, param.step_size_jps, param.stepSizeTcp,
             param.reduceVerticesMaxSteps * 15, param.maxEmptySteps,
             param.reduceVerticesRangeRatio); // * 15
         std::cout << "simplifyed once more!!!" << std::endl;
         i++;
     }
-    if (simplifiedPath_2.size() > 15 &&
-        simplifiedPath_2.size() > simplifiedPath.size()) {
-        simplifiedPath_2 = path_simplifier.reduceVertices(
-            simplifiedPath, param.step_size_jps, param.stepSizeTcp,
-            param.reduceVerticesMaxSteps * 15, param.maxEmptySteps,
-            param.reduceVerticesRangeRatio); // * 15
-        std::cout << "reduceVertices twice!!!" << std::endl;
-    }
-
-    solution.simplified_2 = path_simplifier.generateTrajector(
-        simplifiedPath_2, param.step_size_jps, param.stepSizeTcp);
-    pt.finalPathLength = pathLength(solution.simplified_2.waypoints, distance);
-    std::cout << "simplified_2 waypoints size: "
-              << solution.simplified_2.waypoints.size() << " length: "
-              << pathLength(solution.simplified_2.waypoints, distance)
+    
+    pt.finalPathLength = pathLength(solution.simplified_2, distance);
+    std::cout << "simplified_2 size: "
+              << solution.simplified_2.size() << " length: "
+              << pathLength(solution.simplified_2, distance)
               << std::endl;
-    pt.pathSize = solution.simplified_2.waypoints.size();
+    pt.pathSize = solution.simplified_2.size();
 
     return solution;
 }

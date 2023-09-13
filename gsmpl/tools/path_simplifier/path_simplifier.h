@@ -4,16 +4,16 @@
 #include "gsmpl/utility/log_utility.h"
 #include "gsmpl/base/math_utility.h"
 #include "gsmpl/planner_data/planner_solution.h"
-#include "gsmpl/base/trajectory.h"
+#include "gsmpl/tools/trajectory_processing/trajectory.h"
 #include "gsmpl/tools/local_planner/local_planner.h"
 
 namespace gsmpl {
 class PathSimplifier {
 public:
     struct SolutionRecord {
-        Trajectory simplified;
-        Trajectory smoothed;
-        Trajectory simplified_2;
+        Path simplified;
+        Path smoothed;
+        Path simplified_2;
     };
 
     PathSimplifier(const LocalPlannerBasePtr& local_planner,
@@ -34,8 +34,6 @@ public:
                        double stepSizeTcp) const;
     // Add a state at the middle of each segment
     Path subdividePath(const Path& path) const;
-    Trajectory generateTrajector(const Path& path, double step_size_jps,
-                                 double stepSizeTcp) const;
 
 private:
     RNG rng_;

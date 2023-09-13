@@ -9,7 +9,7 @@ State JointInterpolate::interpolateState(const State& q1, const State& q2,
 
     State q;
     for (std::size_t i = 0; i < q1.size(); i++)
-        q.push_back((q2[i] - q1[i]) * time + q1[i]);
+        q.position.push_back((q2[i] - q1[i]) * time + q1[i]);
     return q;
 }
 std::optional<State> JointInterpolate::validInterpolateState(
@@ -70,12 +70,12 @@ Path JointInterpolate::interpolatePath(const State& q1, const State& q2,
     Path path;
     double deltaTime = calcDeltaTime(q1, q2, jpsStepSize, tcpStepSize);
     unsigned int steps = floor(1.0 / deltaTime);
-    path.push_back(q1);
+    // path.push_back(q1);
     for (double i = 1; i < steps; i++) {
         State q = interpolateState(q1, q2, i * deltaTime);
         path.push_back(q);
     }
-    path.push_back(q2);
+    // path.push_back(q2);
     return path;
 }
 } // namespace gsmpl
