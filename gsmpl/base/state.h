@@ -16,26 +16,26 @@ struct EXPORT State {
         : position(p),
           velocity(p.size(), 0),
           acceleration(p.size(), 0),
-          torque(p.size(), 0) {}
+          effort(p.size(), 0) {}
     State(size_t size) { reserve(size); }
     State() = default;
 
     std::vector<double> position;
     std::vector<double> velocity;
     std::vector<double> acceleration;
-    std::vector<double> torque;
+    std::vector<double> effort;
 
     void resize(std::size_t size) {
         position.resize(size);
         velocity.resize(size);
         acceleration.resize(size);
-        torque.resize(size);
+        effort.resize(size);
     }
     void reserve(size_t size) {
         position.reserve(size);
         velocity.reserve(size);
         acceleration.reserve(size);
-        torque.reserve(size);
+        effort.reserve(size);
     }
 
     double operator[](std::size_t index) const { return position[index]; }
@@ -43,11 +43,11 @@ struct EXPORT State {
     void setAccZero() {
         acceleration = std::vector<double>(position.size(), 0);
     }
-    void setTorqueZero() { torque = std::vector<double>(position.size(), 0); }
-    void setVelAccTorqueZero() {
+    void setEffortZero() { effort = std::vector<double>(position.size(), 0); }
+    void setVelAccEffortZero() {
         setVelZero();
         setAccZero();
-        setTorqueZero();
+        setEffortZero();
     }
 
     void printState(const std::string& desc = {}) const {

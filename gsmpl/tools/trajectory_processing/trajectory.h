@@ -41,7 +41,7 @@ public:
                                    segment.end());
         }
         dense_waypoints.push_back(path.back());
-        dense_waypoints.back().setVelAccTorqueZero();
+        dense_waypoints.back().setVelAccEffortZero();
 
         for (size_t i = 1; i < dense_waypoints.size(); i++) {
             State& q1 = dense_waypoints[i - 1];
