@@ -86,7 +86,7 @@ bool PlannerInterface::plan(PlannerSolution &solution) {
         record_.addPath(simplifierSolution.smoothed, "smoothed");
         record_.addPath(simplifierSolution.simplified_2, "simplified_2");
         record_.addPath(solution.trajectory.dense_waypoints, "dense_waypoints");
-        vf_(record_);
+        // vf_(record_);
         return true;
     }
 
