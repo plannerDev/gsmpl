@@ -58,6 +58,7 @@ bool PlannerInterface::plan(PlannerSolution &solution) {
     solution = planner_->solve();
     auto endTime1 = std::chrono::steady_clock::now();
     record_ = planner_->plannerRecord();
+    std::cout << "solution.isValid() " << solution.isValid() << std::endl;
 
     if (solution.isValid()) {
         auto startTime2 = std::chrono::steady_clock::now();
