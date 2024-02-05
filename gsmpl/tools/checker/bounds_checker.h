@@ -10,12 +10,13 @@ public:
     BoundsChecker(const Bounds& b) : bounds_(b) {}
     bool isValid(const State& q) override {
         assert(q.size() == bounds_.size());
+        q.printState("BoundsChecker");
 
         for (std::size_t i = 0; i < q.size(); i++) {
             double l = -bounds_[i].bound + bounds_[i].offset;
             double h = bounds_[i].bound + bounds_[i].offset;
             if (q[i] >= h || q[i] <= l) {
-                std::cout << "BoundsChecker invalid" << std::endl;
+                std::cout << "BoundsChecker invalid " << i << " l " << l << " h " << h << " q " << q[i] << std::endl;
                 return false;
             }
         }
