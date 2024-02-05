@@ -14,7 +14,7 @@ public:
             double l = -bounds_[i].bound + bounds_[i].offset;
             double h = bounds_[i].bound + bounds_[i].offset;
             if (q[i] > h || q[i] < l) {
-                std::cout << "BoundsChecker invalid " << i << " l " << l << " h " << h << " q " << q[i] << std::endl;
+                // std::cout << "BoundsChecker invalid " << i << " l " << l << " h " << h << " q " << q[i] << std::endl;
                 return false;
             }
         }
