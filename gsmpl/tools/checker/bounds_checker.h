@@ -14,9 +14,12 @@ public:
         for (std::size_t i = 0; i < q.size(); i++) {
             double l = -bounds_[i].bound + bounds_[i].offset;
             double h = bounds_[i].bound + bounds_[i].offset;
-            if (q[i] >= h || q[i] <= l)
+            if (q[i] >= h || q[i] <= l) {
+                std::cout << "BoundsChecker invalid" << std::endl;
                 return false;
+            }
         }
+        std::cout << "BoundsChecker valid" << std::endl;
         return true;
     }
 
